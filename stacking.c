@@ -57,15 +57,10 @@ task main()
 		startTask(DriveMotors);
 		risingMobileMiddle();
 		risingMobile();
-		bool shiftLiftBottom = false;
-	if(vexRT(Btn8L))
-	{
-		if(!shiftLiftBottom)
-		{
-			startTask(stackStack);
-			shiftLiftBottom = true;
-		}
-	}
-	else{shiftLiftBottom = false;}
+        updateStackBtn();
+        if(btnStackRising())
+        {
+            startTask(stackStack);
+        }
 	}
 }
