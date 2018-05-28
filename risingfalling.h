@@ -6,12 +6,21 @@ typedef struct _SetupJoy
 }  SetupJoy;
 
 
-void risingAll()
+void updateJoystick(string joy)
 {
-    Mobile.last = Mobile.cur;
-    
+    joy.last = joy.cur;
+    joy.cur = vexRT[joy];
 }
 
+bool JoyRising(string joy)
+{
+    return joy.cur && !joy.last;
+}
+
+bool JoyFalling(string joy)
+{
+    return !joy.cur && joy.last;
+}
 
 void risingMobile()
 {
