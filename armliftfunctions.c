@@ -86,17 +86,14 @@ void LiftRaiseSimple(int pos, float kp, float ki, float kd)
 
 
 
-void LiftLowerSimple(int pos)
+void LiftLowerSimple(int pos, float kp)
 {
-
+    float error = 0;
 	while(SensorValue[liftPoti] > pos)
 	{
-		if(SensorValue[liftPoti] > pos+400)
-		setLift(-127);
-		else if(SensorValue[liftPoti] > pos+200)
-		setLift(-60);
+        error = pos - SensorValue[liftPoti];
+        setLift(error*kp)
 	}
-setLift(15);
 }
 
 void setMobile(word power,bool debug=true)
