@@ -46,9 +46,7 @@ task DriveMotors()
 	setLeft(vexRT(JOY_THROTTLE)+vexRT(JOY_TURN));
 	setRight(vexRT(JOY_THROTTLE)-vexRT(JOY_TURN));
 }
-task ManualLift()
-{
-}
+
 task main()
 {
 	while(true)
@@ -57,10 +55,15 @@ task main()
 		startTask(DriveMotors);
 		risingMobileMiddle();
 		risingMobile();
-        updateStackBtn();
-        if(btnStackRising())
-        {
-            startTask(stackStack);
-        }
+		bool shiftLiftBottom = false;
+	if(vexRT(Btn8L))
+	{
+		if(!shiftLiftBottom)
+		{
+			startTask(stackStack);
+			shiftLiftBottom = true;
+		}
+	}
+	else{shiftLiftBottom = false;}
 	}
 }

@@ -53,6 +53,9 @@ void ArmRaiseSimple(int pos, bool hardstop)
 		}
 		writeDebugStreamLine("Arm Reached position of %4d", "pos");
 	}
+	if(pos=ARM_TOP)
+	setArm(15);
+	else
 	setArm(-15);
 	if(!hardstop)
 	{
@@ -62,53 +65,35 @@ void ArmRaiseSimple(int pos, bool hardstop)
 		setArm(127);
 		else if(SensorValue[armPoti] < pos-200)
 		setArm(60);
-		else if(SensorValue[liftPoti] == pos+-100)
+		else if(SensorValue[liftPoti] == pos-100)
 		armHolding(pos);
 		}
 	}
 }
 void ArmLowerSimple(int pos, bool hardstop)
 {
-	if(hardstop)
-	{
-		while(SensorValue[armPoti] > pos+100)
+	while(SensorValue[armPoti] > pos+100)
 		{
 		setArm(-127);
 		writeDebugStreamLine("Arm position set as %4d", "pos");
 		}
 		writeDebugStreamLine("Arm Reached position of %4d", "pos");
-		setArm(-15);
-	}
+		if(pos=ARM_BOTTOM)
+	setArm(-15);
+	else
+	setArm(15);
 
-	else if(!hardstop)
-	{
-		while(SensorValue[armPoti] > pos)
-		{
-		if(SensorValue[armPoti] > pos+400)
-		setArm(-127);
-		else if(SensorValue[armPoti] > pos+200)
-		setArm(-60);
-		else if(SensorValue[liftPoti] == pos+-100)
-		armHolding(pos);
-		}
-	}
 }
 void LiftRaiseSimple(int pos)
 {
 	while(SensorValue[liftPoti] < pos)
 	{
-		if(SensorValue[liftPoti] < pos-400)
-		setLift(127);
-		else if(SensorValue[liftPoti] < pos-200)
+		setlift(127);
+		while(SensorValue[liftPoti] < pos-400){sleep(10);}
 		setLift(60);
-		else if(SensorValue[liftPoti] == pos)
-		{
-			if(SensorValue[liftPoti] > pos)
-			setLift(-15);
-			else if(SensorValue[liftPoti] < pos)
-			setLift(15);
-		}
 	}
+setLift(-15);
+
 }
 
 void LiftLowerSimple(int pos)
@@ -121,7 +106,7 @@ void LiftLowerSimple(int pos)
 		else if(SensorValue[liftPoti] > pos+200)
 		setLift(-60);
 	}
-setLift(-15);
+setLift(15);
 }
 
 void setMobile(word power,bool debug=true)
@@ -152,26 +137,12 @@ void mobileOuttake()
 }
 void mobileMiddleDown()
 {
-	if(SensorValue[mobilePoti] > MOBILE_HALFWAY)
-	{
 	   while(SensorValue[mobilePoti] > MOBILE_MIDDLE_DOWN)
 		{
 			if(SensorValue[mobilePoti] > MOBILE_MIDDLE_DOWN+200)
 			{setMobile(-127);}
 			else
-			{setMobile(-75);}
+			{setMobile(-127);}
 		}
 		setMobile(15);
-	}
-	else
-	{
-		 while(SensorValue[mobilePoti] < MOBILE_MIDDLE_UP)
-		{
-			if(SensorValue[mobilePoti] < MOBILE_MIDDLE_UP+200)
-			{setMobile(127);}
-			else
-			{setMobile(75);}
-		}
-		setMobile(-15);
-	}
 }

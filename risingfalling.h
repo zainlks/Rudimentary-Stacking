@@ -1,27 +1,3 @@
-typedef struct _SetupJoy
-{
-    bool cur;
-    bool last;
-    int deadzone;
-}  SetupJoy;
-
-
-void updateJoystick(string joy)
-{
-    joy.last = joy.cur;
-    joy.cur = vexRT[joy];
-}
-
-bool JoyRising(string joy)
-{
-    return joy.cur && !joy.last;
-}
-
-bool JoyFalling(string joy)
-{
-    return !joy.cur && joy.last;
-}
-
 void risingMobile()
 {
 	bool shiftMobile = false;
@@ -43,6 +19,7 @@ void risingMobileMiddle()
 		{
 			if(!shiftMobileMiddle)
 			{
+				//action
 				mobileMiddleDown();
 				shiftMobileMiddle=true;
 			}
@@ -50,21 +27,7 @@ void risingMobileMiddle()
 		}
 }
 
-bool btnLastStack = false;
-bool btnCurStack = false;
-
-void updateStackBtn()
+void risingLiftBottom()
 {
-    btnLastStack = btnCurStack;
-    btnCurStack = vexRT[Btn8D];
-}
 
-bool btnStackRising()
-{
-    return btnCurStack && !btnLastStack;
-}
-
-bool btnStackFalling()
-{
-    return !btnCurStack && btnLastStack
 }
