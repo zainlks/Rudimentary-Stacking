@@ -1,9 +1,6 @@
 //Move Lift Functions
 //Raise Lift Function
-bool liftLimit()
-{
-	return SensorValue[limLift] < 200;
-}
+
 void setLift(word power,bool debug=true)
 {
 	if( debug ) writeDebugStreamLine("%06d Lift %4d", nPgmTime,power );
@@ -23,25 +20,8 @@ void armHolding(int pos)
 	else if(SensorValue[armPoti] < pos +- armTolerance)
 	setArm(15);
 }
-void GoToLimitLift()
-{
-	while(!liftLimit())
-	{
-		setLift(-127);
-	}
-	writeDebugStreamLine("Limit switch hit");
-	setLift(-15);
-}
 
-void GoToLimitArm()
-{
-	while(!SensorValue[limArm])
-	{
-		setArm(-127);
-	}
-	writeDebugStreamLine("Limit Switch Value = %b", SensorValue[limArm]);
-	setArm(-15);
-}
+
 void ArmRaiseSimple(int pos, bool hardstop)
 {
 	if(hardstop)
@@ -53,7 +33,7 @@ void ArmRaiseSimple(int pos, bool hardstop)
 		}
 		writeDebugStreamLine("Arm Reached position of %4d", "pos");
 	}
-	if(pos=ARM_TOP)
+	if(pos==ARM_TOP)
 	setArm(15);
 	else
 	setArm(-15);
@@ -78,23 +58,31 @@ void ArmLowerSimple(int pos, bool hardstop)
 		writeDebugStreamLine("Arm position set as %4d", "pos");
 		}
 		writeDebugStreamLine("Arm Reached position of %4d", "pos");
-		if(pos=ARM_BOTTOM)
+		if(pos==ARM_BOTTOM)
 	setArm(-15);
 	else
 	setArm(15);
 
 }
-void LiftRaiseSimple(int pos)
+void LiftRaiseSimple(int pos, float kp, float ki, float kd)
 {
+	float error = 0;
+	float last_error = 0;
+	float integral = 0;
+	float derivative = 0;
+	unsigned long lastTime = nPgmTime;
 	while(SensorValue[liftPoti] < pos)
 	{
-		setlift(127);
-		while(SensorValue[liftPoti] < pos-400){sleep(10);}
-		setLift(60);
+		error = pos-SensorValue[liftPoti];
+		integral += (nPgmTime - lastTime) * error;
+		derivative= error - last_error;
+		last_error = error;
+		setLift(kp*error + ki*integral + kd*derivative);
 	}
-setLift(-15);
 
 }
+
+
 
 void LiftLowerSimple(int pos)
 {
