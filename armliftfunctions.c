@@ -75,9 +75,11 @@ void LiftRaiseSimple(int pos, float kp, float ki, float kd)
 	{
 		error = pos-SensorValue[liftPoti];
 		integral += (nPgmTime - lastTime) * error;
-		derivative= error - last_error;
+		derivative= (error - last_error)/(nPgmTime-lastTime);
 		last_error = error;
 		setLift(kp*error + ki*integral + kd*derivative);
+		lastTime = nPgmTime;
+		sleep(1);
 	}
 
 }
