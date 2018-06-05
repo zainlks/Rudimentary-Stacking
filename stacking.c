@@ -43,12 +43,12 @@ task stackStack()
 	ArmLowerSimple(ARM_BOTTOM, true);
 	sleep(200);
 	ArmRaiseSimple(1800, true);
-	LiftRaiseSimple(gLiftRaiseTarget[gStackCount], 0.5, 0.5, 0.5);
+	LiftRaisePID(gLiftRaiseTarget[gStackCount], 0.5, 0.5, 0.5);
 	ArmRaiseSimple(ARM_TOP, true);
 	sleep(100);
 	LiftLowerSimple(gLiftPlaceTarget[gStackCount]);
 	ArmLowerSimple(1800, false);
-	LiftRaiseSimple(LIFT_RETURN, 0.5, 0.5, 0.5);
+	LiftRaisePID(LIFT_RETURN, 0.5, 0.5, 0.5);
 	gStackCount++;
 	return;
 }
