@@ -15,13 +15,23 @@ void setArm(word power,bool debug=true)
 }
 void armHolding(int pos)
 {
-	if(SensorValue[armPoti] > pos +- armTolerance)
+	if(SensorValue[armPoti] > pos)
 		setArm(-15);
-	else if(SensorValue[armPoti] < pos +- armTolerance)
+	else if(SensorValue[armPoti] < pos)
 		setArm(15);
 }
 
-
+void liftHolding(int pos)
+{
+	if(SensorValue[liftPoti] > pos)
+	{
+		setLift(-15);
+	}
+	else
+	{
+		setLift(15);
+	}
+}
 void ArmRaiseSimple(int pos, bool hardstop)
 {
 	if(hardstop)

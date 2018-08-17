@@ -25,8 +25,7 @@
 #include "defines.h"
 #include "armliftfunctions.c"
 #include "drive.h"
-#include "risingfalling.c"
-//#include "risingfalling.c"
+#include "risingfalling.h"
 // STACKING ON                     0     1     2     3     4     5     6     7     8     9     10    11
 const int gLiftRaiseTarget[12] = { 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2400, LIFT_TOP };
 const int gLiftPlaceTarget[12] = { 1150, 1150, 1200, 1310, 1450, 1550, 1640, 1750, 1820, 1950, 2070, 2200 };
@@ -37,6 +36,49 @@ int gStackCount = 0;
 bool gStacking = false;
 bool gRapid = false;
 bool gRapidCheck = false;
+
+typedef enum stackStates {
+	stackNotRunning,
+	stackPickupGround,
+	stackStacking,
+	stackDetach,
+	stackClear,
+	stackReturn
+} tStackStates;
+
+tStackStates stackStates;
+task toggleStack()
+{
+		bool shiftStack = false;
+		if(vexRT(Btn8L))
+		{
+			if(!shiftStack)
+			{
+				stackStates = stackPickupGround;
+				shiftStack = true;
+			}
+			else{shiftStack = false;}
+		}
+}
+
+task StackSwitcher()
+{
+	switch (stackStates)
+	{
+	case stackNotRunning:
+		liftHolding(SensorValue[liftPoti]);
+		armHolding(SensorValue[armPoti]);
+		break;
+	case stackPickupGround:;
+	case stackStacking: motor[arm] = motor[liftL] = motor[liftR] = 0; break;
+	case stackDetach: break;
+	case stackReturn: break;
+	case stackClear: break;
+	default: motor[arm] = motor[liftL] = motor[liftR] = 0;
+	break;
+	}
+}
+
 task stackStack()
 {
 	LiftLowerSimple(LIFT_BOTTOM);
@@ -55,30 +97,18 @@ task stackStack()
 
 task DriveMotors()
 {
-setLeft(vexRT(JOY_THROTTLE)+vexRT(JOY_TURN));
-setRight(vexRT(JOY_THROTTLE)-vexRT(JOY_TURN));
-}
-task ManualLift()
-{
-
+	setLeft(vexRT(JOY_THROTTLE)+vexRT(JOY_TURN));
+	setRight(vexRT(JOY_THROTTLE)-vexRT(JOY_TURN));
 }
 task main()
 {
-while(true)
-{
-	//Rising Edge of Stack Button
-	startTask(DriveMotors);
-	risingMobileMiddle();
-	risingMobile();
-	bool shiftStack = false;
-	if(vexRT(Btn8L))
+	while(true)
 	{
-		if(!shiftStack)
-		{
-			startTask(stackStack);
-			shiftStack = true;
-		}
-		else{shiftStack = false;}
+		//Rising Edge of Stack Button
+		startTask(DriveMotors);
+		startTask(StackSwitcher);
+		startTask(toggleStack);
+		risingMobileMiddle();
+		risingMobile();
 	}
-}
 }
