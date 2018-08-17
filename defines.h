@@ -10,8 +10,8 @@
 #define trackingR SensorValue[trackR]
 #define JOY_DEAD abs(JOY_THROTTLE)<DZ_THROTTLE+5 & abs(JOY_THROTTLE)<DZ_TURN+5
 //Lift positions
-#define LIFT_BOTTOM 1100
-#define LIFT_TOP (LIFT_BOTTOM + 1650)
+#define LIFT_BOTTOM 800 //1100
+#define LIFT_TOP (LIFT_BOTTOM + 1930)
 #define LIFT_MID (LIFT_BOTTOM + 620)
 #define LIFT_HOLD_DOWN_THRESHOLD (LIFT_BOTTOM + 50)
 #define LIFT_HOLD_UP_THRESHOLD (LIFT_TOP - 100)
@@ -20,12 +20,13 @@
 #define LIFT_RETURN (LIFT_BOTTOM + 400)
 #define LIFT_WALL (LIFT_BOTTOM + 450)
 
+
 //Arm Positions
-#define RL_ARM_TOP 2880
+#define RL_ARM_TOP 2700
 #define ARM_TOP (RL_ARM_TOP - 100)
 
 //Actual ARM_BOTTOM = 1020
-#define ARM_BOTTOM (RL_ARM_TOP - 1630)
+#define ARM_BOTTOM (RL_ARM_TOP - 1530)
 
 #define ARM_PRESTACK (RL_ARM_TOP - 800)
 #define ARM_RELEASE (RL_ARM_TOP - 700)

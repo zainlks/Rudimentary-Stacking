@@ -49,33 +49,32 @@ typedef enum stackStates {
 tStackStates stackStates;
 task toggleStack()
 {
-		bool shiftStack = false;
-		if(vexRT(Btn8L))
+	bool shiftStack = false;
+	if(vexRT(Btn8L))
+	{
+		if(!shiftStack)
 		{
-			if(!shiftStack)
-			{
-				stackStates = stackPickupGround;
-				shiftStack = true;
-			}
-			else{shiftStack = false;}
+			stackStates = stackPickupGround;
+			shiftStack = true;
 		}
+		else{shiftStack = false;}
+	}
 }
 
 task StackSwitcher()
 {
 	switch (stackStates)
 	{
-	case stackNotRunning:
-		liftHolding(SensorValue[liftPoti]);
-		armHolding(SensorValue[armPoti]);
+	case stackPickupGround:
+		LiftLowerSimple(LIFT_BOTTOM);
+		ArmLowerSimple(ARM_BOTTOM, true);
 		break;
-	case stackPickupGround:;
 	case stackStacking: motor[arm] = motor[liftL] = motor[liftR] = 0; break;
 	case stackDetach: break;
 	case stackReturn: break;
 	case stackClear: break;
 	default: motor[arm] = motor[liftL] = motor[liftR] = 0;
-	break;
+		break;
 	}
 }
 
