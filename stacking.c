@@ -26,6 +26,8 @@
 #include "armliftfunctions.c"
 #include "drive.h"
 #include "risingfalling.h"
+#include "tracking.h"
+#include "tracking.c"
 // STACKING ON                     0     1     2     3     4     5     6     7     8     9     10    11
 const int gLiftRaiseTarget[12] = { 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2400, LIFT_TOP };
 const int gLiftPlaceTarget[12] = { 1150, 1150, 1200, 1310, 1450, 1550, 1640, 1750, 1820, 1950, 2070, 2200 };
