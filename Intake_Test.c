@@ -33,11 +33,12 @@ task IntakeAngle()
 }
 task main()
 {
-	startTask(DriveMotors);
-	startTask(IntakeAngle);
+
 	bool shiftIntake = false;
 	while(true)
 	{
+		startTask(DriveMotors);
+		startTask(IntakeAngle);
 		if(vexRT(Btn6U))
 		{
 			if(!shiftIntake)
@@ -45,7 +46,7 @@ task main()
 				motor[Intake] = 127;
 				shiftIntake = true;
 			}
-			else {shiftIntake= false; motor[Intake]=0;}
+			else {shiftIntake= false;}
 		}
 	}
 
